@@ -49,7 +49,7 @@ def fix_row(row):
             del row[name]
 
     for field, value in row.items():
-        # Skip the email field 
+        # Skip the email field
         if field == 'E-mail':
             continue
 
@@ -71,11 +71,11 @@ def fix_row(row):
     row['id'] = rows[0][0]
 
     return row
-    
+
 
 def handle_row(docroot, results, row):
     for field, value in row.items():
-        if field == 'E-mail' or field == 'id':
+        if field in ('E-mail', 'id'):
             continue
         m = re.match(r'''^Chapter ([0-9]+) - .*$''', field)
         if m is None:

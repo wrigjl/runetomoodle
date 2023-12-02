@@ -17,6 +17,8 @@ nograde_markers = ['Not Started', 'Finished']
 skip_users = set()
 
 def load_skip_users(su):
+    """Load the skip_users file"""
+
     with open('skip_users.csv') as f:
         for line in f:
             line = line.strip()
@@ -24,9 +26,9 @@ def load_skip_users(su):
                 su.add(line)
 
 def fix_row(row):
-    '''Fix up one Runestone gradebook row: delete unecessary fields,
+    """Fix up one Runestone gradebook row: delete unecessary fields,
     strip away %'s, and mark empty those fields which have no grade
-    '''
+    """
 
     if row['E-mail'] in skip_users:
         return None
@@ -36,7 +38,7 @@ def fix_row(row):
             del row[name]
 
     for field, value in row.items():
-        # Skip the email field 
+        # Skip the email field
         if field == 'E-mail':
             continue
 
@@ -49,7 +51,7 @@ def fix_row(row):
         row[field] = value.rstrip('%')
 
     return row
-    
+
 
 def main():
     load_skip_users(skip_users)

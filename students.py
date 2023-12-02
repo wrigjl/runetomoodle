@@ -25,7 +25,7 @@ def handle_file(db, fname):
                 print(f"Conflict: CSV {row['ID number']}, {row['Email address']}")
                 for i in dbrows:
                     print(f"DB {i[0]}, {i[1]}")
-    db.commit()    
+    db.commit()
 
 def main():
     parser = argparse.ArgumentParser("student id parser")
