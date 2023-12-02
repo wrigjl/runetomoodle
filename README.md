@@ -50,3 +50,7 @@ This reads `input.csv` and produces `output.xml` which can be uploaded to Moodle
 All of the assignments and student IDs should line up and you should get no errors.
 The usual failure mode is a student ID that matches a student who has dropped the
 class. To skip this student in the future, put their email address in `skip_users.csv`
+
+Note: `runetomoodle.py` is present here as well. It is less sophisticated and
+produces `output.csv` from `input.csv`. This output CSV can be used with CSV
+grade imports, but I find this process tedious.
