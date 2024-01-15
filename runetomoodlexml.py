@@ -36,6 +36,14 @@ def load_skip_users(su):
             if len(line) > 0:
                 su.add(line)
 
+def translate_users(u):
+    with open("translate.csv") as infile:
+        reader = csv.DictReader(infile)
+        for x in reader:
+            if u == x['from']:
+                return x['to']
+    return u
+
 def fix_row(row):
     '''Fix up one Runestone gradebook row: delete uncessary fields,
     strip away %'s, and mark empty those fields which have no grade
@@ -61,6 +69,9 @@ def fix_row(row):
         # Get rid of trailing %'s in the grades
         row[field] = value.rstrip('%')
 
+    row['E-mail'] = row['E-mail'].lower()
+    row['E-mail'] = translate_users(row['E-mail'])
+
     cur = db.cursor()
     cur.execute('select id from studentid where email = ?', (row['E-mail'], ))
     rows = cur.fetchall()
@@ -71,6 +82,15 @@ def fix_row(row):
     row['id'] = rows[0][0]
 
     return row
+
+
+def create_simple_text_node(docroot, parent, name, text):
+    """create <name>text</name> and append it as a child to 'parent'"""
+
+    n = docroot.createElement(name)
+    parent.appendChild(n)
+    t = docroot.createTextNode(text)
+    n.appendChild(t)
 
 
 def handle_row(docroot, results, row):
@@ -85,23 +105,21 @@ def handle_row(docroot, results, row):
         if len(value) == 0:
             continue
 
+        assignment = m.group(1)
+        while assignment.startswith("0"):
+            assignment = assignment[1:]
+
         result = docroot.createElement('result')
         results.appendChild(result)
 
-        x = docroot.createElement('assignment')
-        t = docroot.createTextNode(f"Reading{m.group(1)}")
-        x.appendChild(t)
-        result.appendChild(x)
+        create_simple_text_node(docroot, result,
+                                'assignment', f"Reading{assignment}")
 
-        x = docroot.createElement('student')
-        t = docroot.createTextNode(f"{row['id']}")
-        x.appendChild(t)
-        result.appendChild(x)
+        create_simple_text_node(docroot, result,
+                                'student', f"{row['id']}")
 
-        x = docroot.createElement('score')
-        t = docroot.createTextNode(f"{value}")
-        x.appendChild(t)
-        result.appendChild(x)
+        create_simple_text_node(docroot, result,
+                                'score', f"{value}")
 
 
 def main():
@@ -109,7 +127,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='runetomoodle')
     parser.add_argument('-i', '--input', help="input csvfile", default="input.csv")
-    parser.add_argument('-o', '--output', help="output csv file", default="output.xml")
+    parser.add_argument('-o', '--output', help="output xml file", default="output.xml")
     args = parser.parse_args()
 
     with open(args.input) as infile, \
