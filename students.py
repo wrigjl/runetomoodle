@@ -1,4 +1,5 @@
 
+"""Load the student email -> ID database"""
 # Import a CSV file from moodle into students.db (sqlite).
 # Sanity check the mappings.
 
@@ -7,8 +8,10 @@ import csv
 import sqlite3
 
 def handle_file(db, fname):
+    """Open and comprehend a single file
+    """
     cur = db.cursor()
-    with open(fname) as csvfile:
+    with open(fname, encoding='UTF-8') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             cur.execute('SELECT id, email FROM studentid WHERE id = ? or email = ?',
@@ -20,7 +23,8 @@ def handle_file(db, fname):
             elif len(dbrows) == 1:
                 if int(dbrows[0][0]) != int(row['ID number']) or \
                    dbrows[0][1] != row['Email address']:
-                    print(f"Conflict: CSV {row['ID number']}, {row['Email address']} DB {dbrows[0][1]}, {dbrows[0][1]}")
+                    print(f"Conflict: CSV {row['ID number']}, {row['Email address']} " +
+                          f"DB {dbrows[0][1]}, {dbrows[0][1]}")
             else:
                 print(f"Conflict: CSV {row['ID number']}, {row['Email address']}")
                 for i in dbrows:
@@ -28,12 +32,15 @@ def handle_file(db, fname):
     db.commit()
 
 def main():
+    """Let's do this..."""
     parser = argparse.ArgumentParser("student id parser")
     parser.add_argument("filename", nargs='+', help="csv filename from moodle")
 
     db = sqlite3.connect("students.db")
     cur = db.cursor()
-    cur.execute('CREATE TABLE IF NOT EXISTS studentid (id integer NOT NULL PRIMARY KEY, email varchar(20) NOT NULL UNIQUE)')
+    cur.execute('CREATE TABLE IF NOT EXISTS studentid ' +
+                '  (id integer NOT NULL PRIMARY KEY, ' +
+                '   email varchar(20) NOT NULL UNIQUE)')
     db.commit()
 
     args = parser.parse_args()
