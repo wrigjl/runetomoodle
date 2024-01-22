@@ -19,7 +19,7 @@ skip_users = set()
 def load_skip_users(su):
     """Load the skip_users file"""
 
-    with open('skip_users.csv') as f:
+    with open('skip_users.csv', encoding='UTF-8') as f:
         for line in f:
             line = line.strip()
             if len(line) > 0:
@@ -54,6 +54,7 @@ def fix_row(row):
 
 
 def main():
+    """Let's do this..."""
     load_skip_users(skip_users)
 
     parser = argparse.ArgumentParser(description='runetomoodle')
@@ -61,8 +62,8 @@ def main():
     parser.add_argument('-o', '--output', help="output csv file", default="output.csv")
     args = parser.parse_args()
 
-    with open(args.input) as infile, \
-        open(args.output, 'w', newline='') as outfile:
+    with open(args.input, encoding='UTF-8') as infile, \
+        open(args.output, 'w', newline='', encoding='UTF-8') as outfile:
         reader = csv.DictReader(infile)
 
         fieldnames = copy.deepcopy(reader.fieldnames)
