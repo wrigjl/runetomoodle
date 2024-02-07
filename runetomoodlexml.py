@@ -112,7 +112,7 @@ def handle_row(docroot, results, row):
 
 
 def main():
-    """Let's do this..."""
+    """Convert Runestone CSV to Moodle XML"""
     load_skip_users(skip_users)
 
     parser = argparse.ArgumentParser(description='runetomoodle')

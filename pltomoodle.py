@@ -85,10 +85,10 @@ def handle_row(docroot, results, row):
 
 
 def main():
-    """Let's do this..."""
+    """Convert PL CSV file to Moodle XML"""
     load_skip_users(skip_users)
 
-    parser = argparse.ArgumentParser(description='runetomoodle')
+    parser = argparse.ArgumentParser(description='pltomoodle')
     parser.add_argument('-i', '--input', help="input csvfile", default="pl-input.csv")
     parser.add_argument('-o', '--output', help="output xml file", default="pl-output.xml")
     args = parser.parse_args()
