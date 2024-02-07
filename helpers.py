@@ -3,7 +3,6 @@
 
 from xml.dom import minidom
 
-
 def load_skip_users(su):
     """When students drop, we want to skip them (less noise on import)"""
     with open('skip_users.csv', encoding='UTF-8') as f:

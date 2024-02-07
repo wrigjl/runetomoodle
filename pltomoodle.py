@@ -4,7 +4,6 @@ Convert a PrairieLearn CSV file to something pleasing to Moodle
 '''
 
 import csv
-import copy
 import argparse
 import sqlite3
 import re
@@ -88,11 +87,6 @@ def main():
     with open(args.input, encoding='UTF-8') as infile, \
         open(args.output, 'w', encoding='UTF-8') as outfile:
         reader = csv.DictReader(infile)
-
-        fieldnames = copy.deepcopy(reader.fieldnames)
-        for name in fields_to_delete:
-            if name in fieldnames:
-                fieldnames.remove(name)
 
         (root, results) = create_moodle_root()
 
