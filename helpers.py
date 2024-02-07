@@ -17,4 +17,13 @@ def create_simple_text_node(docroot, parent, name, text):
     parent.appendChild(n)
     t = docroot.createTextNode(text)
     n.appendChild(t)
-    
+
+
+def create_moodle_entry(docroot, result, assignment, student, score):
+    """Create the appropriate nodes in the XML tree for Moodle"""
+    create_simple_text_node(docroot, result,
+                            'assignment', assignment)
+    create_simple_text_node(docroot, result,
+                            'student', student)
+    create_simple_text_node(docroot, result,
+                            'score', score)

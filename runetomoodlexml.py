@@ -17,7 +17,7 @@ import argparse
 import sqlite3
 import re
 from xml.dom import minidom
-from helpers import load_skip_users, create_simple_text_node
+from helpers import load_skip_users, create_moodle_entry
 
 db = sqlite3.connect('students.db')
 
@@ -101,14 +101,10 @@ def handle_row(docroot, results, row):
         result = docroot.createElement('result')
         results.appendChild(result)
 
-        create_simple_text_node(docroot, result,
-                                'assignment', f"Reading{assignment}")
-
-        create_simple_text_node(docroot, result,
-                                'student', f"{row['id']}")
-
-        create_simple_text_node(docroot, result,
-                                'score', f"{value}")
+        create_moodle_entry(docroot, result,
+                            f"Reading{assignment}",
+                            f"{row['id']}",
+                            f"{value}")
 
 
 def main():
