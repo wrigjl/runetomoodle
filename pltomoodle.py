@@ -10,6 +10,8 @@ import sqlite3
 import re
 from xml.dom import minidom
 
+from helpers import load_skip_users, create_simple_text_node
+
 # Don't need these fields and having "E-mail" come first
 # makes this easier
 fields_to_delete = ['UID', 'Name', 'Role', 'UIN']
@@ -18,13 +20,6 @@ skip_users = set()
 
 db = sqlite3.connect('students.db')
 
-def load_skip_users(su):
-    """When students drop, we want to skip them (less noise on import)"""
-    with open('skip_users.csv', encoding='UTF-8') as f:
-        for line in f:
-            line = line.strip()
-            if len(line) > 0:
-                su.add(line)
 
 
 def fix_row(row):
@@ -57,15 +52,6 @@ def fix_row(row):
             del row[name]
 
     return row
-
-
-def create_simple_text_node(docroot, parent, name, text):
-    """create <name>text</name> and append it as a child to 'parent'"""
-
-    n = docroot.createElement(name)
-    parent.appendChild(n)
-    t = docroot.createTextNode(text)
-    n.appendChild(t)
 
 
 def handle_row(docroot, results, row):
