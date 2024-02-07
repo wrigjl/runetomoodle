@@ -8,7 +8,7 @@ import argparse
 import sqlite3
 import re
 
-from helpers import load_skip_users, create_moodle_entry, create_moodle_root
+from helpers import load_skip_users, create_moodle_entry, create_moodle_root, remove_leading_zeros
 
 # Don't need these fields and having "E-mail" come first
 # makes this easier
@@ -65,10 +65,7 @@ def handle_row(docroot, results, row):
         if len(value) == 0:
             continue
 
-        assignment = m.group(1)
-        while assignment.startswith("0"):
-            assignment = assignment[1:]
-
+        assignment = remove_leading_zeros(m.group(1))
         create_moodle_entry(docroot, results,
                             f"Quiz{assignment}",
                             f"{row['id']}",

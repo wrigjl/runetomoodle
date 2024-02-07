@@ -34,9 +34,19 @@ def create_moodle_entry(docroot, results, assignment, student, score):
     create_simple_text_node(docroot, result,
                             'score', score)
 
+
 def create_moodle_root():
     """Create the root document for the Moodle XML"""
     root = minidom.Document()
     results = root.createElement('results')
     root.appendChild(results)
     return (root, results)
+
+
+def remove_leading_zeros(s):
+    """remove leading zeros from a string"""
+    while s.startswith("0"):
+        s = s[1:]
+    if not s:
+        s = "0"
+    return s
