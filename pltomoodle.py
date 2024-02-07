@@ -8,9 +8,8 @@ import copy
 import argparse
 import sqlite3
 import re
-from xml.dom import minidom
 
-from helpers import load_skip_users, create_moodle_entry
+from helpers import load_skip_users, create_moodle_entry, create_moodle_root
 
 # Don't need these fields and having "E-mail" come first
 # makes this easier
@@ -71,10 +70,7 @@ def handle_row(docroot, results, row):
         while assignment.startswith("0"):
             assignment = assignment[1:]
 
-        result = docroot.createElement('result')
-        results.appendChild(result)
-
-        create_moodle_entry(docroot, result,
+        create_moodle_entry(docroot, results,
                             f"Quiz{assignment}",
                             f"{row['id']}",
                             f"{value}")
@@ -98,9 +94,7 @@ def main():
             if name in fieldnames:
                 fieldnames.remove(name)
 
-        root = minidom.Document()
-        results = root.createElement('results')
-        root.appendChild(results)
+        (root, results) = create_moodle_root()
 
         for row in reader:
             row = fix_row(row)
