@@ -2,6 +2,7 @@
 """Helper functions for the grade manangement utilities"""
 
 from xml.dom import minidom
+import re
 
 def load_skip_users(su):
     """When students drop, we want to skip them (less noise on import)"""
@@ -26,6 +27,9 @@ def create_moodle_entry(docroot, results, assignment, student, score):
 
     result = docroot.createElement('result')
     results.appendChild(result)
+
+    if re.match(r'[0-9]+(\.[0-9]+)?', score) is None:
+        print(f"invalid score: {assignment},{student},{score}")
 
     create_simple_text_node(docroot, result,
                             'assignment', assignment)
